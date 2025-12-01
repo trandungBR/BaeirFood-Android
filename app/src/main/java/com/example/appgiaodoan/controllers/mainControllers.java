@@ -373,7 +373,7 @@ public class mainControllers {
                         }
                         thongTinChung.put("trangthai", "Đang xử lý");
 
-                        // --- TẠO JSON CHI TIẾT (SỬA TẠI ĐÂY) ---
+
                         JSONArray chiTietArray = new JSONArray();
                         for (monAn mon : danhSachMonAn) {
                             int soLuong = cartItems.getOrDefault(mon.getIdMonAn(), 0);
@@ -382,7 +382,7 @@ public class mainControllers {
                                 chiTiet.put("idmonan", mon.getIdMonAn());
                                 chiTiet.put("soluong", soLuong);
 
-                                // SỬA: Đổi 'dongia' thành 'giatien' khớp với SQL
+
                                 chiTiet.put("giatien", mon.getGia());
 
                                 chiTietArray.put(chiTiet);
@@ -1019,16 +1019,16 @@ public class mainControllers {
                 double totalMonth = 0;
                 HashMap<String, com.example.appgiaodoan.models.doanhThuMon> mapMonAn = new HashMap<>();
 
-                // Ngày hiện tại
+
                 String today = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new java.util.Date());
-                String currentMonth = today.substring(0, 7); // yyyy-MM
+                String currentMonth = today.substring(0, 7);
 
                 try {
                     for (JSONObject order : rawData) {
                         double tongTienDon = order.optDouble("tongtien", 0);
-                        String thoiGian = order.optString("thoigian", ""); // 2025-11-27T...
+                        String thoiGian = order.optString("thoigian", "");
 
-                        // Tính tổng doanh thu
+
                         if (thoiGian.startsWith(today)) totalToday += tongTienDon;
                         if (thoiGian.startsWith(currentMonth)) totalMonth += tongTienDon;
                         if (thoiGian.startsWith(currentMonth)) {
@@ -1039,13 +1039,13 @@ public class mainControllers {
                                     int sl = det.optInt("soluong", 0);
                                     double gia = det.optDouble("giatien", 0);
 
-                                    // Lấy tên món từ nested object
+
                                     String tenMon = "Món đã xóa";
                                     if (!det.isNull("monan")) {
                                         tenMon = det.getJSONObject("monan").optString("tenmonan", "Không tên");
                                     }
 
-                                    // Cộng dồn vào Map
+
                                     if (mapMonAn.containsKey(tenMon)) {
                                         mapMonAn.get(tenMon).add(sl, sl * gia);
                                     } else {
@@ -1149,10 +1149,10 @@ public class mainControllers {
             @Override
             public void onSuccess(String realIdTaiXe) {
 
-                // TÍNH TIỀN LỜI (40% phí ship)
+
                 double tienLoi = phiGiaoHang * 0.40;
 
-                // Gọi database với tiền lời đã tính
+
                 mDatabase.taiXeNhanDon(idDonHang, realIdTaiXe, tienLoi, new database.ModelCallbackSimple() {
                     @Override
                     public void onSuccess(String message) {
@@ -1178,7 +1178,7 @@ public class mainControllers {
             public void onSuccess(JSONObject data) {
                 try {
                     double phiShip = data.optDouble("phigiaohang", 0);
-                    double thuNhap = phiShip * 0.4; // 40%
+                    double thuNhap = phiShip * 0.4;
                     String trangThai = data.optString("trangthai", "");
 
                     JSONObject nh = data.optJSONObject("nhahang");
@@ -1217,7 +1217,7 @@ public class mainControllers {
         mDatabase.getTaiXeIdByUserId(userId, new database.TaiXeInfoCallback() {
             @Override
             public void onSuccess(String idTaiXe) {
-                // B2: Lấy lịch sử đơn
+
                 mDatabase.getLichSuHoanThanhTaiXe(idTaiXe, new database.IncomeDriverCallback() {
                     @Override
                     public void onSuccess(List<com.example.appgiaodoan.models.thuNhapTaiXe> list) {

@@ -38,7 +38,7 @@ public class database {
         void onError(String message);
     }
     public interface ModelCallbackLogin {
-        void onSuccess(String message, String accessToken, String userId, String vaiTro); // <--- THÊM String vaiTro
+        void onSuccess(String message, String accessToken, String userId, String vaiTro);
         void onError(String message);
     }
     public interface ModelCallbackLichSu {
@@ -166,10 +166,8 @@ public class database {
                         String trangThai = obj.optString("trangthai", "Hoàn thành");
                         String thoiGianRaw = obj.optString("thoigian", "");
 
-                        // Xử lý hiển thị thời gian đơn giản
                         String thoiGianHienThi = thoiGianRaw.replace("T", " ").split("\\.")[0];
 
-                        // Lấy thông tin quán từ nested object
                         String tenQuan = "Quán ăn";
                         String hinhQuan = "";
 
@@ -271,7 +269,6 @@ public class database {
             try {
                 Log.d(DEBUG_TAG, "♻️ BẮT ĐẦU ĐẶT LẠI CHO ĐƠN: " + idDonHang);
 
-                // --- BƯỚC 1: LẤY ID NHÀ HÀNG TỪ BẢNG DONHANG ---
                 String urlOrder = SUPABASE_URL + "/rest/v1/donhang?iddonhang=eq." + idDonHang.trim() + "&select=idnhahang";
 
                 Log.d(DEBUG_TAG, "👉 URL STEP 1: " + urlOrder);
@@ -302,7 +299,6 @@ public class database {
                 }
 
 
-                // Ở đây tôi dùng chữ thường theo quy ước mới nhất.
                 String urlDetails = SUPABASE_URL + "/rest/v1/chitietdonhang?iddonhang=eq." + idDonHang.trim() + "&select=idmonan,soluong";
 
                 Log.d(DEBUG_TAG, "👉 URL STEP 2: " + urlDetails);
@@ -330,7 +326,6 @@ public class database {
 
                     for (int i = 0; i < arrDetails.length(); i++) {
                         JSONObject item = arrDetails.getJSONObject(i);
-                        // Chú ý: Key JSON phải là chữ thường
                         cartItems.put(item.getString("idmonan"), item.getInt("soluong"));
                     }
 
@@ -349,7 +344,6 @@ public class database {
         });
     }
 
-    // 2. Gửi đánh giá
     public void guiDanhGia(String idDonHang, String idNguoiDung, String idNhaHang, int diem, String noiDung, ModelCallbackSimple callback) {
         runOnBackgroundThread(() -> {
             try {
@@ -380,8 +374,6 @@ public class database {
     public void kiemTraDonHangDangXuLy(String idNguoiDung, ActiveOrderCallback callback) {
         runOnBackgroundThread(() -> {
             try {
-                // Query: idnguoidung = ... AND trangthai = 'Đang xử lý'
-                // Sắp xếp lấy đơn mới nhất (desc)
                 String url = SUPABASE_URL + "/rest/v1/donhang?" +
                         "idnguoidung=eq." + idNguoiDung +
                         "&trangthai=eq." + URLEncoder.encode("Đang xử lý", StandardCharsets.UTF_8.toString()) +
@@ -408,7 +400,7 @@ public class database {
                         JSONObject order = array.getJSONObject(0);
                         String idDonHang = order.getString("iddonhang");
                         String thoiGian = order.getString("thoigian");
-                        double phiShip = order.optDouble("phigiaohang", 15000); // Mặc định 15k nếu null
+                        double phiShip = order.optDouble("phigiaohang", 15000);
 
                         callback.onFound(idDonHang, thoiGian, phiShip);
                     } else {
@@ -458,7 +450,7 @@ public class database {
     public void datDonHang(JSONObject thongTinChung, JSONArray chiTietMonAn, ModelCallbackSimple callback) {
         runOnBackgroundThread(() -> {
             try {
-                // 1. GỬI ĐƠN HÀNG (HEADER)
+
                 RequestBody body = RequestBody.create(JSON, thongTinChung.toString());
                 Request request = new Request.Builder()
                         .url(SUPABASE_URL + "/rest/v1/donhang")
@@ -476,7 +468,7 @@ public class database {
                         callback.onError("Lỗi tạo đơn: " + response.code() + " " + err);
                         return;
                     }
-                    // Lấy ID đơn hàng vừa tạo
+
                     String respStr = response.body().string();
                     JSONArray arr = new JSONArray(respStr);
                     idDonHang = arr.getJSONObject(0).getString("iddonhang");
@@ -487,8 +479,7 @@ public class database {
                     return;
                 }
 
-                // 2. GỬI CHI TIẾT (SỬA LỖI TẠI ĐÂY)
-                // Gán iddonhang vào từng món
+
                 for (int i = 0; i < chiTietMonAn.length(); i++) {
                     JSONObject item = chiTietMonAn.getJSONObject(i);
                     item.put("iddonhang", idDonHang);
@@ -496,7 +487,7 @@ public class database {
 
                 RequestBody bodyDetails = RequestBody.create(JSON, chiTietMonAn.toString());
                 Request requestDetails = new Request.Builder()
-                        // SỬA TÊN BẢNG: chitietdonhang (không gạch dưới)
+
                         .url(SUPABASE_URL + "/rest/v1/chitietdonhang")
                         .addHeader("apikey", SUPABASE_API_KEY)
                         .addHeader("Authorization", "Bearer " + SUPABASE_API_KEY)
@@ -574,15 +565,15 @@ public class database {
         });
     }
 
-    public void dangNhap(String sdt, String matKhau, ModelCallbackLogin callback) { // Đã xóa dấu phẩy thừa
+    public void dangNhap(String sdt, String matKhau, ModelCallbackLogin callback) {
         final String sdtGoc = sdt.trim();
 
-        // --- MÔI TRƯỜNG TEST MODE ---
+
         if (testMode) {
             runOnBackgroundThread(() -> {
                 try {
                     Thread.sleep(500);
-                    // Thêm "vaitro" vào select
+
                     String url = SUPABASE_URL + "/rest/v1/nguoidung?sodienthoai=eq." + URLEncoder.encode(sdtGoc, StandardCharsets.UTF_8.toString()) + "&select=idnguoidung,matkhau,vaitro";
 
                     Request request = new Request.Builder()
@@ -594,7 +585,7 @@ public class database {
 
                     try (Response response = client.newCall(request).execute()) {
                         String body = response.body().string();
-                        JSONArray arr = new JSONArray(body); // Khai báo arr ở đây
+                        JSONArray arr = new JSONArray(body);
 
                         if (arr.length() == 0) {
                             callback.onError("Sai SĐT hoặc tài khoản không tồn tại!");
@@ -606,9 +597,9 @@ public class database {
 
                         if (matKhau.equals(matKhauCSDL)) {
                             String userId = user.getString("idnguoidung");
-                            String vaiTro = user.optString("vaitro", "nguoidung"); // Lấy vai trò
+                            String vaiTro = user.optString("vaitro", "nguoidung");
 
-                            // Gọi onSuccess với đủ 4 tham số
+
                             callback.onSuccess("Đăng nhập thành công (Test Mode)", "FAKE_TOKEN", userId, vaiTro);
                         } else {
                             callback.onError("Sai mật khẩu!");
@@ -621,11 +612,11 @@ public class database {
             return;
         }
 
-        // --- MÔI TRƯỜNG THẬT (CHẠY KHI testMode = false) ---
+
         runOnBackgroundThread(() -> {
             try {
                 String encodedPhone = URLEncoder.encode("eq." + sdtGoc, StandardCharsets.UTF_8.toString());
-                // Thêm "vaitro" vào select
+
                 String url = SUPABASE_URL + "/rest/v1/nguoidung?sodienthoai=" + encodedPhone + "&select=idnguoidung,matkhau,vaitro";
 
                 Request request = new Request.Builder()
@@ -642,7 +633,7 @@ public class database {
                         return;
                     }
                     String body = response.body().string();
-                    JSONArray arr = new JSONArray(body); // Khai báo arr
+                    JSONArray arr = new JSONArray(body);
 
                     if (arr.length() == 0) {
                         callback.onError("Tài khoản không tồn tại!");
@@ -654,9 +645,9 @@ public class database {
 
                     if (matKhau.equals(matKhauCSDL)) {
                         String userId = user.getString("idnguoidung");
-                        String vaiTro = user.optString("vaitro", "nguoidung"); // Lấy vai trò
+                        String vaiTro = user.optString("vaitro", "nguoidung");
 
-                        // Gọi onSuccess với đủ 4 tham số
+
                         callback.onSuccess("Đăng nhập thành công!", "FAKE_TOKEN", userId, vaiTro);
                     } else {
                         callback.onError("Sai mật khẩu!");
@@ -903,8 +894,7 @@ public class database {
     public void getActiveOrder(String userId, ActiveOrderListener listener) {
         runOnBackgroundThread(() -> {
             try {
-                // Query: Tìm đơn hàng có idnguoidung khớp VÀ trạng thái là 'Đang xử lý'
-                // Sắp xếp: Lấy đơn mới nhất (thoigian DESC)
+
                 String trangThai = URLEncoder.encode("Đang xử lý", StandardCharsets.UTF_8.toString());
 
                 String url = SUPABASE_URL + "/rest/v1/donhang?" +
@@ -930,10 +920,10 @@ public class database {
                     JSONArray array = new JSONArray(json);
 
                     if (array.length() > 0) {
-                        // Có đơn hàng đang xử lý -> Trả về JSON Object của đơn đó
+
                         listener.onActiveOrderLoaded(array.getJSONObject(0));
                     } else {
-                        // Không có đơn hàng nào
+
                         listener.onNoActiveOrder();
                     }
                 }
@@ -945,15 +935,13 @@ public class database {
     public void getDanhSachDanhGia(String idNhaHang, ModelCallbackDanhGiaList callback) {
         runOnBackgroundThread(() -> {
             try {
-                // --- BƯỚC 1: XÂY DỰNG URL ---
-                // Lưu ý: Cấu trúc &select=...,nguoidung(tennguoidung) yêu cầu
-                // bảng 'danhgia' phải có khóa ngoại trỏ tới 'nguoidung'
+
                 String url = SUPABASE_URL + "/rest/v1/danhgia?" +
                         "idnhahang=eq." + idNhaHang.trim() +
                         "&select=iddanhgia,diem,noidung,thoigian,nguoidung(tennguoidung)" +
                         "&order=thoigian.desc";
 
-                // >>> LOG URL ĐỂ KIỂM TRA <<<
+
                 Log.d(DEBUG_TAG, "👉 URL GET DANH GIA: " + url);
 
                 Request request = new Request.Builder()
@@ -964,12 +952,12 @@ public class database {
                         .get().build();
 
                 try (Response response = client.newCall(request).execute()) {
-                    // --- BƯỚC 2: KIỂM TRA PHẢN HỒI ---
+
                     if (!response.isSuccessful()) {
-                        // Đọc nội dung lỗi từ Supabase
+
                         String errorBody = response.body() != null ? response.body().string() : "Empty Body";
 
-                        // >>> LOG NỘI DUNG LỖI CHI TIẾT <<<
+
                         Log.e(DEBUG_TAG, "❌ LỖI API DANH GIA (" + response.code() + "): " + errorBody);
 
                         callback.onError("Lỗi Server: " + errorBody);
@@ -984,14 +972,14 @@ public class database {
 
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject obj = arr.getJSONObject(i);
-                        // Đảm bảo dùng key chữ thường
+
                         String id = obj.getString("iddanhgia");
                         int diem = obj.getInt("diem");
                         String noidung = obj.optString("noidung", "");
                         String thoigian = obj.optString("thoigian", "").split("T")[0];
 
                         String tenUser = "Người dùng";
-                        // Xử lý Json Object lồng nhau từ bảng nguoidung
+
                         if (!obj.isNull("nguoidung")) {
                             JSONObject userObj = obj.getJSONObject("nguoidung");
                             tenUser = userObj.optString("tennguoidung", "Ẩn danh");
@@ -1010,7 +998,7 @@ public class database {
     public void getDiemDanhGia(String idNhaHang, RatingListCallback callback) {
         runOnBackgroundThread(() -> {
             try {
-                // Chỉ lấy cột 'diem' để tính toán cho nhẹ
+
                 String url = SUPABASE_URL + "/rest/v1/danhgia?" +
                         "idnhahang=eq." + idNhaHang.trim() +
                         "&select=diem";
@@ -1056,7 +1044,7 @@ public class database {
                         .build();
 
                 try (Response response = client.newCall(request).execute()) {
-                    // Supabase trả về header "Content-Range": "0-0/1" nếu có 1 dòng
+
                     String range = response.header("Content-Range");
                     boolean isLiked = range != null && !range.startsWith("*/0");
                     callback.onResult(isLiked);
@@ -1102,7 +1090,7 @@ public class database {
     public void getDanhSachYeuThich(String userId, ModelCallbackDanhSach callback) {
         runOnBackgroundThread(() -> {
             try {
-                // Query: Lấy bảng yeuthich, join với bảng nhahang để lấy thông tin quán
+
                 String url = SUPABASE_URL + "/rest/v1/yeuthich?" +
                         "idnguoidung=eq." + userId.trim() +
                         "&select=nhahang(*)";
@@ -1128,7 +1116,7 @@ public class database {
 
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject item = arr.getJSONObject(i);
-                        // Dữ liệu quán ăn nằm trong object lồng nhau "nhahang"
+
                         if (!item.isNull("nhahang")) {
                             JSONObject nhObj = item.getJSONObject("nhahang");
                             quanAn quan = gson.fromJson(nhObj.toString(), quanAn.class);
@@ -1311,7 +1299,7 @@ public class database {
                         .addHeader("apikey", SUPABASE_API_KEY)
                         .addHeader("Authorization", "Bearer " + SUPABASE_API_KEY)
                         .addHeader("Content-Type", "application/json")
-                        .patch(body).build(); // Dùng PATCH để sửa
+                        .patch(body).build();
 
                 try (Response response = client.newCall(request).execute()) {
                     if (response.isSuccessful()) callback.onSuccess("Cập nhật thành công!");
@@ -1327,7 +1315,7 @@ public class database {
                         .url(SUPABASE_URL + "/rest/v1/monan?idmonan=eq." + idMonAn)
                         .addHeader("apikey", SUPABASE_API_KEY)
                         .addHeader("Authorization", "Bearer " + SUPABASE_API_KEY)
-                        .delete().build(); // Dùng DELETE
+                        .delete().build();
 
                 try (Response response = client.newCall(request).execute()) {
                     if (response.isSuccessful()) callback.onSuccess("Đã xóa món ăn!");
@@ -1420,7 +1408,7 @@ public class database {
                         "&idtaixe=is.null" +
                         "&select=iddonhang,phigiaohang,tongtien," +
                         "nhahang(tennhahang,diachi,anhdaidien_url)," +
-                        "nguoidung(diachi)," + // Lấy địa chỉ khách
+                        "nguoidung(diachi)," +
                         "chitietdonhang(count)";
 
                 Request request = new Request.Builder()
@@ -1569,7 +1557,7 @@ public class database {
                     String responseBody = response.body() != null ? response.body().string() : "";
 
                     if (!response.isSuccessful()) {
-                        // === LOG LỖI CHI TIẾT ===
+
                         Log.e(DEBUG_TAG, "❌ LỖI HTTP (" + response.code() + "): " + responseBody);
                         callback.onError("Lỗi tải chi tiết: " + responseBody);
                         return;
