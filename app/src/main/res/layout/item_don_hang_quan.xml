@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvMaDon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Đơn #12345"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/tvTrangThai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đang xử lý"
+                android:textColor="#FF9800"
+                android:textStyle="bold"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvThoiGian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="20/11/2025 10:30"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvTongTien"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="150.000đ"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/llActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/btnHuy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Từ chối"
+                android:textColor="#4CAF50"
+                android:backgroundTint="#F44336"
+                android:layout_marginEnd="4dp"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <Button
+                android:id="@+id/btnNhanDon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nhận đơn"
+                android:textColor="#2196F3"
+                android:backgroundTint="#2196F3"
+                android:layout_marginStart="4dp"
+                style="?android:attr/borderlessButtonStyle"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

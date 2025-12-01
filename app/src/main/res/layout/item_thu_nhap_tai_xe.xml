@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTenQuan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Quán"
+            android:textStyle="bold"
+            android:textColor="#000"/>
+
+        <TextView
+            android:id="@+id/tvThoiGian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20/11 10:30"
+            android:textSize="12sp"
+            android:textColor="#666"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTienLoi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+15.000đ"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"/>
+
+</LinearLayout>

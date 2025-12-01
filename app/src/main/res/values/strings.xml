@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="sms_text">Gửi mã xác thực qua <b>Tin Nhắn</b></string>
+</resources>

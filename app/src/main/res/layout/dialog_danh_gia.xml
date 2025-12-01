@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bạn cảm thấy món ăn thế nào?"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:layout_marginBottom="16dp"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="5.0"
+        android:progressTint="#FFC107"
+        android:secondaryProgressTint="#FFC107" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="Chia sẻ cảm nhận của bạn...">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNoiDung"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:gravity="top|start"
+            android:minHeight="100dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

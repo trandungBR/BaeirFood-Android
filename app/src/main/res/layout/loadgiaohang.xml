@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FFFFFF">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:indeterminateTint="#FF5722"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/ivSuccess"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/check_circle_24dp_e3e3e3_fill0_wght400_grad0_opsz24"
+        android:visibility="gone"
+        android:contentDescription="Thành công"
+        android:tint="#4CAF50"/>
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:text="Đang tìm tài xế..." />
+
+</LinearLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApplication">
+        <activity
+            android:name=".views.dangnhap"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".views.xacthucotp" android:exported="true"/>
+        <activity android:name=".views.nhapmatkhau" android:exported="true"/>
+        <activity android:name=".views.dangki" android:exported="true"/>
+        <activity android:name=".views.trangchu" android:exported="true"/>
+        <activity android:name=".views.timKiem" android:exported="true"/>
+        <activity android:name=".views.nhapViTri" android:exported="true"/>
+        <activity android:name=".views.caidat" android:exported="true"/>
+        <activity android:name=".views.chitietnhahang" android:exported="true"/>
+        <activity android:name=".views.chitietdonhang" android:exported="true"/>
+        <activity android:name=".views.chitietkhuyenmai" android:exported="true"/>
+        <activity android:name=".views.chitietthanhtoan" android:exported="true"/>
+        <activity android:name=".views.loadgiaohang" android:exported="true"/>
+        <activity android:name=".views.lichsuhoatdong" android:exported="true"/>
+        <activity android:name=".views.chitietdanhgia" android:exported="true"/>
+        <activity android:name=".views.quananyeuthich" android:exported="true"/>
+        <activity android:name=".views.trangchuquanan" android:exported="true"/>
+        <activity android:name=".views.quanlydon" android:exported="true"/>
+        <activity android:name=".views.quanlydoanhthu" android:exported="true"/>
+        <activity android:name=".views.quanlymonan" android:exported="true"/>
+        <activity android:name=".views.quanlydanhgia" android:exported="true"/>
+        <activity android:name=".views.trangchutaixe" android:exported="true"/>
+        <activity android:name=".views.chitietgiaohang" android:exported="true"/>
+        <activity android:name=".views.thunhaptaixe" android:exported="true"/>
+    </application>
+
+</manifest>
