@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Locale;
-
+import com.example.appgiaodoan.BuildConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -22,7 +22,7 @@ import okhttp3.*;
 public class database {
 
     private static final String SUPABASE_URL = "https://hkjqvbgrjqxenugjuhni.supabase.co";
-    public static final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhranF2YmdyanF4ZW51Z2p1aG5pIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTkxOTI5OSwiZXhwIjoyMDc1NDk1Mjk5fQ.FdP1lfa5iT-_sRDPvul3yLumWj9vbKjQnZovEoX-ODs";
+    public static final String SUPABASE_API_KEY = BuildConfig.SUPABASE_API_KEY;
 
     private final OkHttpClient client = new OkHttpClient();
     private boolean testMode = true;

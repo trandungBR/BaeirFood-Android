@@ -1,19 +1,30 @@
+import java.util.Properties
+import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
+}
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
 }
 
 android {
     namespace = "com.example.appgiaodoan"
     compileSdk = 36
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.example.appgiaodoan"
         minSdk = 36
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val supabaseKey = localProperties.getProperty("SUPABASE_KEY") ?: ""
+        buildConfigField("String", "SUPABASE_API_KEY", "\"$supabaseKey\"")
     }
 
     buildTypes {
@@ -32,7 +43,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
